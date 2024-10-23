@@ -14,7 +14,7 @@ function App() {
     secretCode: "",
     publicFilter: "",
     privateFilter: "",
-    url: "http://golestan.ub.ac.ir/golestanservice/gservice.asmx",
+    url: "http://golestan._.ac.ir/golestanservice/gservice.asmx",
   });
 
   const handleInputChange = (e) => {
@@ -29,15 +29,13 @@ function App() {
     try {
       setLoading(true);
       setError("");
-      const data = await invoke("get_data");
+      const data = await invoke("get_data", { ...formState });
       setResult(JSON.stringify(data, null, 2));
-      // Add success feedback animation
       const button = document.querySelector(".submit-button");
       button.classList.add("success");
       setTimeout(() => button.classList.remove("success"), 2000);
     } catch (err) {
       setError(err.message);
-      // Add error feedback animation
       const button = document.querySelector(".submit-button");
       button.classList.add("error");
       setTimeout(() => button.classList.remove("error"), 2000);

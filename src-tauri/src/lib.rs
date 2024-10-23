@@ -1,7 +1,51 @@
-// Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
+fn encode_xml(input: String) -> String {
+    input
+        .replace('&', "&amp;")
+        .replace('<', "&lt;")
+        .replace('>', "&gt;")
+        .replace('"', "&quot;")
+        .replace('\'', "&#39;")
+}
+
 #[tauri::command]
-fn get_data() -> String {
-    format!("this is data")
+async fn get_data(
+    login_name: String,
+    password: String,
+    report_id: String,
+    secret_code: String,
+    public_filter: String,
+    private_filter: String,
+    url: String,
+) -> String {
+    let client = reqwest::Client::new();
+    let soap_body = format!(
+        r#"<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+        <SOAP-ENV:Body>
+            <golInfo xmlns="urn:nowpardaz">
+                <login>{}</login>
+                <pass>{}</pass>
+                <sec>{}</sec>
+                <pub>{}</pub>
+                <pri>{}</pri>
+                <iFID>{}</iFID>
+            </golInfo>
+        </SOAP-ENV:Body>
+    </SOAP-ENV:Envelope>"#,
+        login_name,
+        password,
+        secret_code,
+        public_filter,
+        encode_xml(private_filter),
+        report_id
+    );
+    let response = client
+        .post(url)
+        .header("Content-Type", "text/xml; charset=utf-8")
+        .header("SOAPAction", "urn:nowpardaz/golInfo")
+        .body(soap_body)
+        .send()
+        .await.unwrap();
+    response.text().await.unwrap()
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
