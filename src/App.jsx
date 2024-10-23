@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
-import "./App.css"
+import "./App.css";
 
-function App() {
+export default function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [result, setResult] = useState("");
@@ -51,7 +51,6 @@ function App() {
           <h2>Parameters Configuration</h2>
           <p className="subtitle">Configure your service parameters below</p>
         </header>
-
         <div className="form-content">
           <div className="form-section credentials-section">
             <h3>Authentication</h3>
@@ -96,7 +95,6 @@ function App() {
               </div>
             </div>
           </div>
-
           <div className="form-section">
             <h3>Identification</h3>
             <div className="input-grid">
@@ -118,7 +116,7 @@ function App() {
                   onChange={handleInputChange}
                   onFocus={() => setActiveField("reportId")}
                   onBlur={() => setActiveField("")}
-                  placeholder="REP-123"
+                  placeholder="1030"
                 />
               </div>
               <div
@@ -142,7 +140,6 @@ function App() {
               </div>
             </div>
           </div>
-
           <div className="form-section">
             <h3>Filters</h3>
             <div className="filter-grid">
@@ -188,7 +185,6 @@ function App() {
               </div>
             </div>
           </div>
-
           <div className="form-section">
             <h3>Service Configuration</h3>
             <div
@@ -221,14 +217,12 @@ function App() {
               </div>
             </div>
           </div>
-
           {error && (
             <div className="error-message" role="alert">
               <span className="error-icon">!</span>
               <span className="error-text">{error}</span>
             </div>
           )}
-
           {result && (
             <div className="result-section">
               <h3>Results</h3>
@@ -242,5 +236,3 @@ function App() {
     </div>
   );
 }
-
-export default App;

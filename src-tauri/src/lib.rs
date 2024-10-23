@@ -17,8 +17,7 @@ async fn get_data(
     private_filter: String,
     url: String,
 ) -> String {
-    let client = reqwest::Client::new();
-    let soap_body = format!(
+    let soap_body: String = format!(
         r#"<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
         <SOAP-ENV:Body>
             <golInfo xmlns="urn:nowpardaz">
@@ -38,14 +37,17 @@ async fn get_data(
         encode_xml(private_filter),
         report_id
     );
-    let response = client
+    reqwest::Client::new()
         .post(url)
         .header("Content-Type", "text/xml; charset=utf-8")
         .header("SOAPAction", "urn:nowpardaz/golInfo")
         .body(soap_body)
         .send()
-        .await.unwrap();
-    response.text().await.unwrap()
+        .await
+        .unwrap()
+        .text()
+        .await
+        .unwrap()
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
