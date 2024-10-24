@@ -3,18 +3,6 @@ import { getCurrentWindow } from "@tauri-apps/api/window";
 export function TopBar() {
   const appWindow = getCurrentWindow();
 
-  const Icon = ({ svgName, className, ...props }) => {
-    className = className || "icon";
-    return (
-      <img
-        alt=""
-        className={className}
-        src={`./assets/${svgName}.svg`}
-        {...props}
-      />
-    );
-  };
-
   return (
     <div data-tauri-drag-region className="mainApp">
       <div data-tauri-drag-region className="topBar">
@@ -24,14 +12,11 @@ export function TopBar() {
           </div>
         </div>
         <div className="titleBarBtns">
-          <button
-            className="topBtn minimizeBtn"
-            onClick={() => appWindow.minimize()}
-          >
-            <Icon svgName="minimize" className="icon-t" />
+          <button className="topBtn minimizeBtn" onClick={() => appWindow.minimize()}>
+            <img alt="" className="icon-t" src="./assets/minimize.svg" />
           </button>
           <button className="topBtn closeBtn" onClick={() => appWindow.close()}>
-            <Icon svgName="delete" className="icon-t" />
+            <img alt="" className="icon-t" src="./assets/delete.svg" />
           </button>
         </div>
       </div>
