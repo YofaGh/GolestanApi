@@ -1,7 +1,7 @@
+use reqwest::{Client, Error, Request};
 use std::sync::Arc;
-use tauri::{State, generate_context, generate_handler, Builder};
+use tauri::{generate_context, generate_handler, App, Builder, Manager, State};
 use tokio::sync::{oneshot, Mutex, MutexGuard};
-use reqwest::{Client, Request, Error};
 
 struct AppState {
     cancel_tx: Option<oneshot::Sender<()>>,
@@ -61,7 +61,7 @@ async fn get_data(
         encode_xml(private_filter),
         report_id
     );
-    let client: Client = reqwest::Client::new();
+    let client: Client = Client::new();
     let request: Request = client
         .post(url)
         .header("Content-Type", "text/xml; charset=utf-8")
@@ -93,6 +93,11 @@ pub fn run() {
         .plugin(tauri_plugin_shell::init())
         .manage(state.clone())
         .invoke_handler(generate_handler![get_data, cancel_request])
+        .setup(|app: &mut App| {
+            #[cfg(debug_assertions)]
+            app.get_webview_window("main").unwrap().open_devtools();
+            Ok(())
+        })
         .run(generate_context!())
         .expect("error while running tauri application");
 }
