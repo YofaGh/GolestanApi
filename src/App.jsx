@@ -25,6 +25,10 @@ export default function App() {
     }));
   };
 
+  const handleCancel = async () => {
+    await invoke("cancel_request");
+  };
+
   const handleGetData = async () => {
     try {
       setLoading(true);
@@ -204,16 +208,28 @@ export default function App() {
                   onBlur={() => setActiveField("")}
                   className="url-input"
                 />
-                <button
-                  onClick={handleGetData}
-                  disabled={loading}
-                  className={`submit-button ${loading ? "loading" : ""}`}
-                >
-                  <span className="button-text">
-                    {loading ? "Processing..." : "Get Data"}
-                  </span>
-                  <span className="button-icon">→</span>
-                </button>
+                <div className="button-group">
+                  <button
+                    onClick={handleGetData}
+                    disabled={loading}
+                    className={`submit-button ${loading ? "loading" : ""}`}
+                  >
+                    <span className="button-text">
+                      {loading ? "Processing..." : "Get Data"}
+                    </span>
+                    <span className="button-icon">→</span>
+                  </button>
+                  {loading && (
+                    <button
+                      onClick={handleCancel}
+                      className="submit-button"
+                      aria-label="Cancel request"
+                    >
+                      <span className="button-text">Cancel</span>
+                      <span className="button-icon">✕</span>
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </div>
