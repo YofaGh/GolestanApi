@@ -15,7 +15,8 @@
         "title": "golestanapi",
         "width": 800,
         "height": 600,
-        "decorations": false
+        "decorations": false,
+        "shadow": false
       }
     ],
     "security": {

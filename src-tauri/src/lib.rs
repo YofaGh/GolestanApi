@@ -1,10 +1,35 @@
-use reqwest::{Client, Error, Request};
-use std::sync::Arc;
+mod error;
+use error::Error;
+use reqwest::{Client, Request};
+use std::{
+    fs::{create_dir_all, File},
+    io::{Error as IoError, Write},
+    path::PathBuf,
+    sync::Arc,
+};
 use tauri::{generate_context, generate_handler, App, Builder, Manager, State};
 use tokio::sync::{oneshot, Mutex, MutexGuard};
 
 struct AppState {
     cancel_tx: Option<oneshot::Sender<()>>,
+}
+
+pub fn load_up_checks(data_dir_path: PathBuf) -> Result<(), Error> {
+    create_dir_all(&data_dir_path)
+        .map_err(|err: IoError| Error::directory("open", &data_dir_path, err))?;
+    let path: &PathBuf = &data_dir_path.join("profiles.json");
+    if path.exists() {
+        return Ok(());
+    }
+    let mut file: File = std::fs::OpenOptions::new()
+        .write(true)
+        .create_new(true)
+        .open(path)
+        .map_err(|err: IoError| Error::file("open", &path, err))?;
+    file.write_all("[]".as_bytes())
+        .map_err(|err: IoError| Error::file("write to", &path, err))?;
+    file.flush()
+        .map_err(|err: IoError| Error::file("flush", &path, err))
 }
 
 fn encode_xml(input: String) -> String {
@@ -17,10 +42,12 @@ fn encode_xml(input: String) -> String {
 }
 
 #[tauri::command]
-async fn cancel_request(state: State<'_, Arc<Mutex<AppState>>>) -> Result<(), String> {
+async fn cancel_request(state: State<'_, Arc<Mutex<AppState>>>) -> Result<(), Error> {
     let mut state: MutexGuard<'_, AppState> = state.lock().await;
     if let Some(cancel_tx) = state.cancel_tx.take() {
-        let _ = cancel_tx.send(());
+        cancel_tx
+            .send(())
+            .map_err(|_| Error::ReqwestError("Could not cancel the request".to_string()))?;
     }
     Ok(())
 }
@@ -28,14 +55,15 @@ async fn cancel_request(state: State<'_, Arc<Mutex<AppState>>>) -> Result<(), St
 #[tauri::command]
 async fn get_data(
     state: State<'_, Arc<Mutex<AppState>>>,
-    login_name: String,
+    user_name: String,
     password: String,
     report_id: String,
     secret_code: String,
     public_filter: String,
     private_filter: String,
     url: String,
-) -> Result<String, String> {
+) -> Result<String, Error> {
+    println!("YY");
     let (cancel_tx, cancel_rx) = oneshot::channel();
     {
         let mut state: MutexGuard<'_, AppState> = state.lock().await;
@@ -54,7 +82,7 @@ async fn get_data(
             </golInfo>
         </SOAP-ENV:Body>
     </SOAP-ENV:Envelope>"#,
-        login_name,
+        user_name,
         password,
         secret_code,
         encode_xml(public_filter),
@@ -67,19 +95,16 @@ async fn get_data(
         .header("Content-Type", "text/xml; charset=utf-8")
         .header("SOAPAction", "urn:nowpardaz/golInfo")
         .body(soap_body)
-        .build()
-        .map_err(|e: Error| e.to_string())?;
+        .build()?;
     let request = client.execute(request);
     let result: String = tokio::select! {
         _ = cancel_rx => {
-            "".to_string()
+            String::new()
         }
         result = request => {
             match result {
-                Ok(resp) => {
-                    resp.text().await.unwrap_or_else(|_| "Failed to get text".to_string())
-                },
-                Err(_) => "".to_string()
+                Ok(resp) => resp.text().await?,
+                Err(_) => String::new()
             }
         }
     };
@@ -91,9 +116,11 @@ pub fn run() {
     let state: Arc<Mutex<AppState>> = Arc::new(Mutex::new(AppState { cancel_tx: None }));
     Builder::default()
         .plugin(tauri_plugin_shell::init())
+        .plugin(tauri_plugin_fs::init())
         .manage(state.clone())
         .invoke_handler(generate_handler![get_data, cancel_request])
         .setup(|app: &mut App| {
+            load_up_checks(app.path().app_data_dir()?).expect("f");
             #[cfg(debug_assertions)]
             app.get_webview_window("main").unwrap().open_devtools();
             Ok(())

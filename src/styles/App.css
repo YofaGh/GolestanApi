@@ -17,7 +17,7 @@
 
 /* Header styles */
 .form-header {
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  background: linear-gradient(135deg, var(--cyan) 0%, #1d4ed8 100%);
   padding: 2rem;
   color: white;
   text-align: center;
@@ -116,7 +116,7 @@ textarea:hover {
 input:focus,
 textarea:focus {
   outline: none;
-  border-color: #2563eb;
+  border-color: var(--cyan);
   background: white;
   box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
 }
@@ -140,13 +140,12 @@ textarea {
   flex: 1;
 }
 
-/* Button styles */
 .submit-button {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  background: #2563eb;
+  background: var(--cyan);
   color: white;
   padding: 0 1.5rem;
   border: none;
@@ -298,26 +297,6 @@ textarea {
   }
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
-}
-
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .app {
@@ -377,7 +356,7 @@ textarea {
   color: #000000;
   font-weight: bold;
   margin-right: auto;
-  margin-left: 4px;
+  /* margin-left: 4px; */
 }
 
 .titleText {

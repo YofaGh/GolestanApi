@@ -1,0 +1,11 @@
+@import "App.css";
+@import "ProfileModal.css";
+@import "SaveProfileModal.css";
+
+:root {
+  --cyan: #009788;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}

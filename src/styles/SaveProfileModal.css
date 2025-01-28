@@ -1,0 +1,85 @@
+/* Save Profile Modal Additional Styles */
+.save-mode-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.mode-button {
+  flex: 1;
+  padding: 0.875rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  background: #f8fafc;
+  color: #1e293b;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mode-button.active {
+  background: var(--cyan);
+  color: white;
+  border-color: var(--cyan);
+}
+
+.mode-button:hover:not(.active) {
+  border-color: var(--cyan);
+  background: white;
+}
+
+.profile-name-input {
+  width: 100%;
+  padding: 0.875rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  background: #f8fafc;
+  margin-top: 0.5rem;
+}
+
+.profile-name-input:focus {
+  outline: none;
+  border-color: var(--cyan);
+  background: white;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+}
+
+.profile-select-button.selected {
+  border-color: var(--cyan);
+  background: #f0f7ff;
+}
+
+.modal-error {
+  color: #dc2626;
+  font-size: 0.9rem;
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  background: #fef2f2;
+  border-radius: 8px;
+  border: 1px solid #fee2e2;
+}
+
+.modal-footer {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.save-button {
+  background: var(--cyan);
+  color: white;
+  padding: 0.875rem 1.5rem;
+  border-radius: 10px;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.save-button:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}

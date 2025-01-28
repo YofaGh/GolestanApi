@@ -1,6 +1,6 @@
 import { getCurrentWindow } from "@tauri-apps/api/window";
 
-export function TopBar() {
+export default function TopBar() {
   const appWindow = getCurrentWindow();
 
   return (

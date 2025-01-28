@@ -1,30 +1,25 @@
-import { useState } from "react";
-import { invoke } from "@tauri-apps/api/core";
-import { TopBar } from "./TopBar";
-import "./App.css";
+import { useState, useEffect } from "react";
+import { readFile, invoke } from "./tauri-utils";
+import { useProfilesStore, useFormStore, useActiveFieldStore } from "./store";
+import {
+  ProfileModal,
+  SaveProfileModal,
+  TopBar,
+  ModalTriggerButton,
+  ParamInput,
+} from "./components";
 
 export default function App() {
+  const { setProfiles } = useProfilesStore();
+  const { formState, updateField } = useFormStore();
+  const { activeField, setActiveField, deactiveField } = useActiveFieldStore();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [result, setResult] = useState("");
-  const [activeField, setActiveField] = useState("");
-  const [formState, setFormState] = useState({
-    loginName: "",
-    password: "",
-    reportId: "",
-    secretCode: "",
-    publicFilter: "",
-    privateFilter: "",
-    url: "http://golestan._.ac.ir/golestanservice/gservice.asmx",
-  });
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormState((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  useEffect(() => {
+    (async () => setProfiles(await readFile("profiles.json")))();
+  }, []);
 
   const handleCancel = async () => {
     await invoke("cancel_request");
@@ -53,6 +48,12 @@ export default function App() {
     <>
       <TopBar />
       <div className="app">
+        <div className="profile-button-container">
+          <ModalTriggerButton modalName="profiles" label="Select Profile" />
+          <ModalTriggerButton modalName="saveProfile" label="Save Profile" />
+        </div>
+        <ProfileModal />
+        <SaveProfileModal />
         <div className="form-container">
           <header className="form-header">
             <h2>Parameters Configuration</h2>
@@ -62,134 +63,32 @@ export default function App() {
             <div className="form-section credentials-section">
               <h3>Authentication</h3>
               <div className="input-grid">
-                <div
-                  className={`input-group ${
-                    activeField === "loginName" ? "active" : ""
-                  }`}
-                >
-                  <label>
-                    <span className="label-text">Login Name</span>
-                    <span className="label-hint">Enter your username</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="loginName"
-                    value={formState.loginName}
-                    onChange={handleInputChange}
-                    onFocus={() => setActiveField("loginName")}
-                    onBlur={() => setActiveField("")}
-                    placeholder="johndoe"
-                  />
-                </div>
-                <div
-                  className={`input-group ${
-                    activeField === "password" ? "active" : ""
-                  }`}
-                >
-                  <label>
-                    <span className="label-text">Password</span>
-                    <span className="label-hint">Enter your password</span>
-                  </label>
-                  <input
-                    type="password"
-                    name="password"
-                    value={formState.password}
-                    onChange={handleInputChange}
-                    onFocus={() => setActiveField("password")}
-                    onBlur={() => setActiveField("")}
-                    placeholder="••••••••"
-                  />
-                </div>
+                <ParamInput labelText="User Name" fieldName="userName" />
+                <ParamInput
+                  labelText="Password"
+                  type="password"
+                  fieldName="password"
+                />
               </div>
             </div>
             <div className="form-section">
-              <h3>Identification</h3>
               <div className="input-grid">
-                <div
-                  className={`input-group ${
-                    activeField === "reportId" ? "active" : ""
-                  }`}
-                >
-                  <label>
-                    <span className="label-text">Report ID</span>
-                    <span className="label-hint">
-                      Enter your report identifier
-                    </span>
-                  </label>
-                  <input
-                    type="text"
-                    name="reportId"
-                    value={formState.reportId}
-                    onChange={handleInputChange}
-                    onFocus={() => setActiveField("reportId")}
-                    onBlur={() => setActiveField("")}
-                    placeholder="1030"
-                  />
-                </div>
-                <div
-                  className={`input-group ${
-                    activeField === "secretCode" ? "active" : ""
-                  }`}
-                >
-                  <label>
-                    <span className="label-text">Secret Code</span>
-                    <span className="label-hint">Enter your secret code</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="secretCode"
-                    value={formState.secretCode}
-                    onChange={handleInputChange}
-                    onFocus={() => setActiveField("secretCode")}
-                    onBlur={() => setActiveField("")}
-                    placeholder="SC-456"
-                  />
-                </div>
+                <ParamInput labelText="Report ID" fieldName="reportId" />
+                <ParamInput labelText="Secret Code" fieldName="secretCode" />
               </div>
             </div>
             <div className="form-section">
-              <h3>Filters</h3>
               <div className="filter-grid">
-                <div
-                  className={`textarea-group ${
-                    activeField === "publicFilter" ? "active" : ""
-                  }`}
-                >
-                  <label>
-                    <span className="label-text">Public Filter</span>
-                    <span className="label-hint">
-                      Enter public filter parameters
-                    </span>
-                  </label>
-                  <textarea
-                    name="publicFilter"
-                    value={formState.publicFilter}
-                    onChange={handleInputChange}
-                    onFocus={() => setActiveField("publicFilter")}
-                    onBlur={() => setActiveField("")}
-                    placeholder="Enter your public filter configuration..."
-                  />
-                </div>
-                <div
-                  className={`textarea-group ${
-                    activeField === "privateFilter" ? "active" : ""
-                  }`}
-                >
-                  <label>
-                    <span className="label-text">Private Filter</span>
-                    <span className="label-hint">
-                      Enter private filter parameters
-                    </span>
-                  </label>
-                  <textarea
-                    name="privateFilter"
-                    value={formState.privateFilter}
-                    onChange={handleInputChange}
-                    onFocus={() => setActiveField("privateFilter")}
-                    onBlur={() => setActiveField("")}
-                    placeholder="Enter your private filter configuration..."
-                  />
-                </div>
+                <ParamInput
+                  labelText="Public Filter"
+                  type="textarea"
+                  fieldName="publicFilter"
+                />
+                <ParamInput
+                  labelText="Private Filter"
+                  type="textarea"
+                  fieldName="privateFilter"
+                />
               </div>
             </div>
             <div className="form-section">
@@ -206,11 +105,10 @@ export default function App() {
                 <div className="url-input-wrapper">
                   <input
                     type="url"
-                    name="url"
                     value={formState.url}
-                    onChange={handleInputChange}
+                    onChange={(e) => updateField("url", e.target.value)}
                     onFocus={() => setActiveField("url")}
-                    onBlur={() => setActiveField("")}
+                    onBlur={deactiveField}
                     className="url-input"
                   />
                   <div className="button-group">
@@ -248,7 +146,7 @@ export default function App() {
               <div className="result-section">
                 <h3>Results</h3>
                 <div className="result-container">
-                  <pre className="result-display">{result}</pre>
+                  <textarea className="result-display">{result}</textarea>
                 </div>
               </div>
             )}
