@@ -24,8 +24,8 @@ export default function App() {
       setIsScrolled(scrollPosition > 50);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   useEffect(() => {
@@ -65,17 +65,25 @@ export default function App() {
       <SaveProfileModal />
       <div className="form-container">
         <header data-tauri-drag-region className="form-header">
-          <div data-tauri-drag-region className={`titleBarBtns ${isScrolled ? "no-rounded" : ""}`}>
-            <button
-              className={`topBtn minimizeBtn ${isScrolled ? "topBtn-nor" : ""}`}
-              onClick={() => appWindow.minimize()}
-            ></button>
-            <button
-              className={`topBtn closeBtn ${isScrolled ? "topBtn-nor" : ""}`}
-              onClick={() => appWindow.close()}
-            >
-              x
-            </button>
+          <div
+            data-tauri-drag-region
+            className={`titleBarBtns ${isScrolled ? "no-rounded" : ""}`}
+          >
+            {isScrolled && <p className="h-scrolled">Golestan API</p>}
+            <div className="button-container">
+              <button
+                className={`topBtn minimizeBtn ${
+                  isScrolled ? "topBtn-nor" : ""
+                }`}
+                onClick={() => appWindow.minimize()}
+              ></button>
+              <button
+                className={`topBtn closeBtn ${isScrolled ? "topBtn-nor" : ""}`}
+                onClick={() => appWindow.close()}
+              >
+                x
+              </button>
+            </div>
           </div>
           <h2 data-tauri-drag-region>Golestan API</h2>
           <p data-tauri-drag-region className="subtitle">

@@ -329,7 +329,6 @@ textarea {
   top: 0;
   margin-top: 10px;
   margin-right: 10px;
-  flex-direction: row;
   justify-content: flex-end;
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
@@ -343,6 +342,21 @@ textarea {
   background: linear-gradient(90deg, var(--cyan) 0%, var(--cyang) 100%);
   width: 100%;
   z-index: 100;
+  justify-content: space-between;
+  padding-left: 16px;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.h-scrolled {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 400;
+  margin-left: 10px;
+  align-self: center;
 }
 
 .titleBarBtns > .topBtn {
