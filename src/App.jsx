@@ -64,12 +64,19 @@ export default function App() {
       <ProfileModal />
       <SaveProfileModal />
       <div className="form-container">
-        <header data-tauri-drag-region className="form-header">
+        <header
+          data-tauri-drag-region
+          className={`form-header ${isScrolled ? "scrolled" : ""}`}
+        >
           <div
             data-tauri-drag-region
             className={`titleBarBtns ${isScrolled ? "no-rounded" : ""}`}
           >
-            {isScrolled && <p className="h-scrolled">Golestan API</p>}
+            {isScrolled && (
+              <p data-tauri-drag-region className="h-scrolled">
+                Golestan API
+              </p>
+            )}
             <div className="button-container">
               <button
                 className={`topBtn minimizeBtn ${
