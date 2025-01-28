@@ -2,8 +2,19 @@
 @import "ProfileModal.css";
 @import "SaveProfileModal.css";
 
+body {
+  margin: 0;
+  font-family: "MouldyCheeseRegular", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
+    "Droid Sans", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  user-select: none;
+}
+
 :root {
   --cyan: #009788;
+  --cyang: #00413b;
 }
 
 ::-webkit-scrollbar {

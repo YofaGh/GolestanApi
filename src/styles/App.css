@@ -1,11 +1,12 @@
 .app {
-  min-height: 100vh;
+  min-height: 100%;
   background: linear-gradient(135deg, #f6f8fd 0%, #f1f4f9 100%);
-  padding: 2rem;
   font-family: system-ui, -apple-system, sans-serif;
+  border-radius: 20px;
 }
 
 .form-container {
+  border-radius: 20px;
   max-width: 1000px;
   margin: 0 auto;
   background: white;
@@ -15,9 +16,8 @@
   animation: fadeIn 0.5s ease;
 }
 
-/* Header styles */
 .form-header {
-  background: linear-gradient(135deg, var(--cyan) 0%, #1d4ed8 100%);
+  background: linear-gradient(135deg, var(--cyan) 0%, var(--cyang) 100%);
   padding: 2rem;
   color: white;
   text-align: center;
@@ -159,7 +159,7 @@ textarea {
 }
 
 .submit-button:hover {
-  background: #1d4ed8;
+  background: var(--cyang);
   transform: translateY(-1px);
 }
 
@@ -320,85 +320,20 @@ textarea {
   }
 }
 
-.mainApp {
-  z-index: 9999;
-  position: fixed;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  width: 100%;
-  height: 40px;
-  box-sizing: border-box;
-  /* box-shadow: 0 4px 2px -2px rgba(0, 0, 0, 0.162); */
-  -moz-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
-  -webkit-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
-  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
-  background-color: #fff;
-}
-
-.mainApp > .topBar {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  user-select: none;
-  -webkit-app-region: drag;
-}
-
-.titleBar {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  -webkit-app-region: no-drag;
-}
-
-.titleBarText{
-  color: #000000;
-  font-weight: bold;
-  margin-right: auto;
-  /* margin-left: 4px; */
-}
-
-.titleText {
-  margin-left: 5px;
-}
-
-.titleBar > .toggleButton {
-  width: 45px;
-  height: 40px;
-  border: none;
-  outline: none;
-  background-color: transparent;
-  background-repeat: no-repeat;
-  background-position: center;
-  transition: 0.2s;
-  cursor: pointer;
-}
-
-.titleBar > .toggleButton:hover {
-  animation: none;
-}
-
-.titleBar > .title {
-  margin-left: 10px;
-  width: 100%;
-  line-height: 30px;
-  margin-top: 5px;
-  padding-bottom: 5px;
-}
-
 .titleBarBtns {
   display: flex;
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin-top: 10px;
+  margin-right: 10px;
+  float: right;
   flex-direction: row;
-  width: 120px;
-  height: 40px;
   justify-content: flex-end;
   -webkit-app-region: no-drag;
 }
 
 .titleBarBtns > .topBtn {
-  width: 40px;
-  height: 40px;
   border: none;
   outline: none;
   background-color: transparent;
@@ -411,35 +346,34 @@ textarea {
   display: flex;
 }
 
-.icon-t {
-  width: 15px;
-  height: 15px;
+.topBtn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+.topBtn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
-.icon-t-d {
-  width: 20px;
-  height: 20px;
-  margin-right: 3px;
-}
-
-.titleBarBtns > .minimizeBtn:hover {
-  background-color: #000000;
-}
-
-.titleBarBtns > .closeBtn:hover {
+.closeBtn:hover {
   background-color: #910000;
 }
 
-.mainApp > .contentArea {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  height: 100%;
+.minimizeBtn {
+  position: relative;
 }
 
-.contentArea > .contentPages {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
+.minimizeBtn::before {
+  content: "_";
+  position: relative;
+  top: -10px;
 }

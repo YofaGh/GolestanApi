@@ -1,9 +1,12 @@
+import { getCurrentWindow } from "@tauri-apps/api/window";
 import { invoke as tauriInvoke } from "@tauri-apps/api/core";
 import {
   readTextFile,
   writeTextFile,
   BaseDirectory,
 } from "@tauri-apps/plugin-fs";
+
+export const getAppWindow = () => getCurrentWindow();
 
 export const invoke = async (fn, args) => await tauriInvoke(fn, args);
 
