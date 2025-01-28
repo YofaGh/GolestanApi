@@ -16,6 +16,17 @@ export default function App() {
   const [error, setError] = useState("");
   const [result, setResult] = useState("");
   const appWindow = getAppWindow();
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      setIsScrolled(scrollPosition > 50);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     (async () => setProfiles(await readFile("profiles.json")))();
@@ -54,13 +65,13 @@ export default function App() {
       <SaveProfileModal />
       <div className="form-container">
         <header data-tauri-drag-region className="form-header">
-          <div className="titleBarBtns">
+          <div data-tauri-drag-region className={`titleBarBtns ${isScrolled ? "no-rounded" : ""}`}>
             <button
-              className="topBtn minimizeBtn"
+              className={`topBtn minimizeBtn ${isScrolled ? "topBtn-nor" : ""}`}
               onClick={() => appWindow.minimize()}
             ></button>
             <button
-              className="topBtn closeBtn"
+              className={`topBtn closeBtn ${isScrolled ? "topBtn-nor" : ""}`}
               onClick={() => appWindow.close()}
             >
               x
