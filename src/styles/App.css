@@ -6,11 +6,10 @@
 }
 
 .form-container {
-  border-radius: 20px;
   max-width: 1000px;
   margin: 0 auto;
   background: white;
-  border-radius: 16px;
+  border-radius: 20px;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
   overflow: hidden;
   animation: fadeIn 0.5s ease;
@@ -312,7 +311,7 @@ textarea {
   }
 
   .form-container {
-    border-radius: 12px;
+    border-radius: 16px;
   }
 
   .form-content {
@@ -333,16 +332,14 @@ textarea {
   position: fixed;
   right: 0;
   top: 0;
-  margin-top: 10px;
-  margin-right: 10px;
+  margin-top: 0px;
+  margin-right: 0px;
   justify-content: flex-end;
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
 }
 
 .no-rounded {
-  margin-top: 0px;
-  margin-right: 0px;
   border-top-left-radius: 0px;
   border-top-right-radius: 0px;
   background: linear-gradient(90deg, var(--cyan) 0%, var(--cyang) 100%);
@@ -355,6 +352,20 @@ textarea {
 .button-container {
   display: flex;
   flex-direction: row;
+  transform: translateY(0); /* Initial position */
+  opacity: 1;
+  transition: all 0.3s ease; /* Add transition for button container */
+  margin-top: 10px;
+  margin-right: 10px;
+}
+
+.button-container-nor {
+  margin-top: 0;
+  margin-right: 0;
+}
+
+.no-rounded .button-container {
+  transform: translateY(0); /* Final position when scrolled */
 }
 
 .h-scrolled {
@@ -398,7 +409,7 @@ textarea {
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease; /* Transition for individual buttons */
 }
 .topBtn-nor {
   border-radius: 0;

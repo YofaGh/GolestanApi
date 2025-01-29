@@ -14,7 +14,7 @@ const SaveProfileModal = () => {
 
   const handleSaveProfile = async ({ mode, profile }) => {
     mode === "new" ? addProfile(profile) : updateProfile(profile);
-    await writeFile("profiles.json", profiles);
+    await writeFile("profiles.json", useProfilesStore.getState().profiles);
     setModalState("saveProfile", false);
   };
 

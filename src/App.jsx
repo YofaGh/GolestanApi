@@ -77,7 +77,11 @@ export default function App() {
                 Golestan API
               </p>
             )}
-            <div className="button-container">
+            <div
+              className={`button-container ${
+                isScrolled ? "button-container-nor" : ""
+              }`}
+            >
               <button
                 className={`topBtn minimizeBtn ${
                   isScrolled ? "topBtn-nor" : ""
