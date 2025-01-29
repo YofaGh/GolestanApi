@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useModalsStore, useProfilesStore, useFormStore } from "../store";
 import { writeFile } from "../tauri-utils";
+import { useModalsStore, useProfilesStore, useFormStore } from "../store";
 
 const SaveProfileModal = () => {
   const { modals, setModalState } = useModalsStore();

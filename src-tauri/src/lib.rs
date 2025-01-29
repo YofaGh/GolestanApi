@@ -63,7 +63,6 @@ async fn get_data(
     private_filter: String,
     url: String,
 ) -> Result<String, Error> {
-    println!("YY");
     let (cancel_tx, cancel_rx) = oneshot::channel();
     {
         let mut state: MutexGuard<'_, AppState> = state.lock().await;
@@ -120,7 +119,7 @@ pub fn run() {
         .manage(state.clone())
         .invoke_handler(generate_handler![get_data, cancel_request])
         .setup(|app: &mut App| {
-            load_up_checks(app.path().app_data_dir()?).expect("f");
+            load_up_checks(app.path().app_data_dir()?).expect("error while running load up checks");
             #[cfg(debug_assertions)]
             app.get_webview_window("main").unwrap().open_devtools();
             Ok(())

@@ -14,6 +14,10 @@ export const useProfilesStore = create((set) => ({
         p.name === profile.name ? profile : p
       ),
     })),
+  deleteProfile: (profile) =>
+    set((state) => ({
+      profiles: state.profiles.filter((p) => p.name !== profile.name),
+    })),
 }));
 
 export const useModalsStore = create((set) => ({
@@ -60,12 +64,15 @@ export const useFormStore = create((set) => ({
 
 export const useActiveFieldStore = create((set) => ({
   activeField: null,
-  setActiveField: (fieldName) =>
-    set({
-      activeField: fieldName,
-    }),
-  deactiveField: () =>
-    set({
-      activeField: null,
-    }),
+
+  setActiveField: (fieldName) => set({ activeField: fieldName }),
+  deactiveField: () => set({ activeField: null }),
+}));
+
+export const useReqStore = create((set) => ({
+  result: "",
+  error: "",
+
+  setResult: (result) => set({ result }),
+  setError: (error) => set({ error }),
 }));

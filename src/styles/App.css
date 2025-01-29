@@ -40,7 +40,6 @@
   font-size: 0.95rem;
 }
 
-/* Content layout */
 .form-content {
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
@@ -59,7 +58,6 @@ h3 {
   font-weight: 600;
 }
 
-/* Grid layouts */
 .input-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -72,7 +70,6 @@ h3 {
   gap: 1.5rem;
 }
 
-/* Form elements */
 .input-group,
 .textarea-group {
   position: relative;
@@ -102,7 +99,6 @@ label {
   margin-top: 0.2rem;
 }
 
-/* Input styles */
 input,
 textarea {
   padding: 0.875rem;
@@ -133,7 +129,6 @@ textarea {
   resize: vertical;
 }
 
-/* URL section */
 .url-group {
   margin-bottom: 1rem;
 }
@@ -197,7 +192,6 @@ textarea {
   animation: error 0.5s ease;
 }
 
-/* Error message */
 .error-message {
   display: flex;
   align-items: center;
@@ -223,7 +217,6 @@ textarea {
   font-weight: bold;
 }
 
-/* Results section */
 .result-container {
   background: #f8fafc;
   border: 2px solid #e2e8f0;
@@ -241,7 +234,6 @@ textarea {
   overflow-x: auto;
 }
 
-/* Animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -304,7 +296,6 @@ textarea {
   }
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
   .app {
     padding: 1rem;
@@ -352,9 +343,9 @@ textarea {
 .button-container {
   display: flex;
   flex-direction: row;
-  transform: translateY(0); /* Initial position */
+  transform: translateY(0);
   opacity: 1;
-  transition: all 0.3s ease; /* Add transition for button container */
+  transition: all 0.3s ease;
   margin-top: 10px;
   margin-right: 10px;
 }
@@ -365,7 +356,7 @@ textarea {
 }
 
 .no-rounded .button-container {
-  transform: translateY(0); /* Final position when scrolled */
+  transform: translateY(0);
 }
 
 .h-scrolled {
@@ -409,7 +400,7 @@ textarea {
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  transition: all 0.3s ease; /* Transition for individual buttons */
+  transition: all 0.3s ease;
 }
 .topBtn-nor {
   border-radius: 0;
