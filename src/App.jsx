@@ -1,6 +1,4 @@
-import { useEffect } from "react";
-import { readFile } from "./tauri-utils";
-import { useProfilesStore } from "./store";
+import { startUp } from "./utils";
 import {
   FormHeader,
   FormResult,
@@ -11,11 +9,7 @@ import {
 } from "./components";
 
 export default function App() {
-  const { setProfiles } = useProfilesStore();
-
-  useEffect(() => {
-    (async () => setProfiles(await readFile("profiles.json")))();
-  }, []);
+  startUp();
 
   return (
     <div className="app">

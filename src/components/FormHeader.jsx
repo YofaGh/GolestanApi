@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { getAppWindow } from "../tauri-utils";
 
-
 export default function FormHeader() {
   const appWindow = getAppWindow();
   const [isScrolled, setIsScrolled] = useState(false);

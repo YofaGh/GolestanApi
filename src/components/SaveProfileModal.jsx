@@ -1,90 +1,52 @@
-import React, { useState } from "react";
-import { writeFile } from "../tauri-utils";
-import { useModalsStore, useProfilesStore, useFormStore } from "../store";
+import { useState } from "react";
+import { handleSave } from "../utils";
+import { useModalsStore, useProfilesStore } from "../store";
 
 const SaveProfileModal = () => {
   const { modals, setModalState } = useModalsStore();
-  const handleClose = () => setModalState("saveProfile", false);
-  const { profiles, addProfile, updateProfile } = useProfilesStore();
-  const formState = useFormStore((state) => state.formState);
-  const [mode, setMode] = useState("new");
+  const [isNewProfile, setIsNewProfile] = useState(true);
   const [selectedProfile, setSelectedProfile] = useState(null);
   const [newProfileName, setNewProfileName] = useState("");
   const [error, setError] = useState("");
 
-  const handleSaveProfile = async ({ mode, profile }) => {
-    mode === "new" ? addProfile(profile) : updateProfile(profile);
-    await writeFile("profiles.json", useProfilesStore.getState().profiles);
-    setModalState("saveProfile", false);
-  };
-
   if (!modals.saveProfile) return null;
-
-  const handleSave = () => {
-    if (mode === "new") {
-      if (!newProfileName.trim()) {
-        setError("Please enter a profile name");
-        return;
-      }
-      if (profiles.some((p) => p.name === newProfileName)) {
-        setError("A profile with this name already exists");
-        return;
-      }
-      handleSaveProfile({
-        mode: "new",
-        profile: {
-          ...formState,
-          name: newProfileName,
-        },
-      });
-    } else {
-      if (!selectedProfile) {
-        setError("Please select a profile to overwrite");
-        return;
-      }
-      handleSaveProfile({
-        mode: "overwrite",
-        profile: {
-          ...formState,
-          name: selectedProfile.name,
-        },
-      });
-    }
-    handleClose();
-  };
-
   return (
-    <div className="modal-overlay" onClick={handleClose}>
+    <div
+      className="modal-overlay"
+      onClick={() => setModalState("saveProfile", false)}
+    >
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h2>Save Profile</h2>
-          <button className="modal-close" onClick={handleClose}>
+          <button
+            className="modal-close"
+            onClick={() => setModalState("saveProfile", false)}
+          >
             ×
           </button>
         </div>
         <div className="modal-body">
           <div className="save-mode-buttons">
             <button
-              className={`mode-button ${mode === "new" ? "active" : ""}`}
+              className={`mode-button ${isNewProfile ? "active" : ""}`}
               onClick={() => {
-                setMode("new");
+                setIsNewProfile(true);
                 setError("");
               }}
             >
               Create New
             </button>
             <button
-              className={`mode-button ${mode === "overwrite" ? "active" : ""}`}
+              className={`mode-button ${isNewProfile ? "active" : ""}`}
               onClick={() => {
-                setMode("overwrite");
+                setIsNewProfile(false);
                 setError("");
               }}
             >
               Overwrite Existing
             </button>
           </div>
-
-          {mode === "new" ? (
+          {isNewProfile ? (
             <div className="input-group">
               <label>
                 <span className="label-text">Profile Name</span>
@@ -102,7 +64,7 @@ const SaveProfileModal = () => {
             </div>
           ) : (
             <div className="profile-list">
-              {profiles.map((profile, index) => (
+              {useProfilesStore.getState().profiles.map((profile, index) => (
                 <button
                   key={index}
                   onClick={() => {
@@ -118,11 +80,19 @@ const SaveProfileModal = () => {
               ))}
             </div>
           )}
-
           {error && <div className="modal-error">{error}</div>}
-
           <div className="modal-footer">
-            <button className="save-button" onClick={handleSave}>
+            <button
+              className="save-button"
+              onClick={() =>
+                handleSave(
+                  isNewProfile,
+                  newProfileName.trim(),
+                  setError,
+                  selectedProfile
+                )
+              }
+            >
               Save Profile
             </button>
           </div>

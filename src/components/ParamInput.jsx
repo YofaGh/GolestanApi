@@ -1,3 +1,4 @@
+import { XMLInputFormatter } from "../utils";
 import { useActiveFieldStore, useFormStore } from "../store";
 
 export default function ParamInput({ labelText, type, fieldName }) {
@@ -14,7 +15,9 @@ export default function ParamInput({ labelText, type, fieldName }) {
       {type === "textarea" ? (
         <textarea
           value={formState[fieldName]}
-          onChange={(e) => updateField(fieldName, e.target.value)}
+          onChange={(e) =>
+            updateField(fieldName, XMLInputFormatter(e.target.value))
+          }
           onFocus={() => setActiveField(fieldName)}
           onBlur={deactiveField}
         />

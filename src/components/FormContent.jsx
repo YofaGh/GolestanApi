@@ -1,35 +1,15 @@
-import { useState } from "react";
 import { ParamInput } from ".";
 import { invoke } from "../tauri-utils";
+import { handleGetData } from "../utils";
 import { useFormStore, useActiveFieldStore, useReqStore } from "../store";
 
 export default function FormContent() {
   const { formState, updateField } = useFormStore();
   const { activeField, setActiveField, deactiveField } = useActiveFieldStore();
-  const [loading, setLoading] = useState(false);
-  const { setResult, setError } = useReqStore();
+  const { loading } = useReqStore();
 
   const handleCancel = async () => {
     await invoke("cancel_request");
-  };
-
-  const handleGetData = async () => {
-    try {
-      setLoading(true);
-      setError("");
-      const data = await invoke("get_data", { ...formState });
-      setResult(JSON.stringify(data, null, 2));
-      const button = document.querySelector(".submit-button");
-      button.classList.add("success");
-      setTimeout(() => button.classList.remove("success"), 2000);
-    } catch (err) {
-      setError(err.message);
-      const button = document.querySelector(".submit-button");
-      button.classList.add("error");
-      setTimeout(() => button.classList.remove("error"), 2000);
-    } finally {
-      setLoading(false);
-    }
   };
 
   return (

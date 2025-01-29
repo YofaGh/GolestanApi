@@ -72,7 +72,9 @@ export const useActiveFieldStore = create((set) => ({
 export const useReqStore = create((set) => ({
   result: "",
   error: "",
+  loading: false,
 
   setResult: (result) => set({ result }),
   setError: (error) => set({ error }),
+  setLoading: (loading) => set({ loading }),
 }));

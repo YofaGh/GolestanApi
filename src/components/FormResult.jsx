@@ -1,4 +1,5 @@
 import { useReqStore } from "../store";
+import { XMLResultFormatter } from "../utils";
 
 export default function FormResult() {
   const { result, error } = useReqStore();
@@ -18,7 +19,7 @@ export default function FormResult() {
           <textarea
             readOnly
             className="result-display"
-            value={result}
+            value={XMLResultFormatter(result)}
           ></textarea>
         </div>
       </div>
