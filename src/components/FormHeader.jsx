@@ -48,8 +48,6 @@ export default function FormHeader() {
       </div>
       <h2 data-tauri-drag-region>Golestan API</h2>
       <p data-tauri-drag-region className="subtitle">
-        Made By YofaGh :)
-        <br />
         Configure your service parameters below
       </p>
     </header>

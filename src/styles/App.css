@@ -422,3 +422,15 @@ textarea {
   position: relative;
   top: -10px;
 }
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.sig-cent {
+  justify-self: center;
+  justify-content: center;
+  align-self: center;
+}

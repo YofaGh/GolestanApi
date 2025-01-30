@@ -24,6 +24,7 @@ export default function App() {
         <div className="form-content">
           <FormContent />
           <FormResult />
+          <p className="subtitle sig-cent">Made by YofaGh :)</p>
         </div>
       </div>
     </div>
