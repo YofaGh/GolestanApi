@@ -33,15 +33,20 @@ export const XMLInputFormatter = (inputStr) => {
 };
 
 export const XMLResultFormatter = (xmlString) => {
-  const match = xmlString.match(/<golInfoResult><Root[^>]*>(.*?)<\/Root>/s);
-  if (match) {
-    const rows = match[1]
-      .replace(/\\"/g, '"')
-      .match(/<row[^>]*\/>/g)
-      .map((row) => `\t${row}`)
-      .join("\n");
-    return `<Root xmlns="">\n${rows}\n</Root>`;
-  }
+  try {
+    const match = xmlString.match(
+      /<golInfoResult><Root[^>]*>([\s\S]*?)<\/Root>/
+    );
+    if (match) {
+      let nodes = match[1]
+        .replace(/\\"/g, '"')
+        .match(/<(\w+)([^>]*)>([^<]*)<\/\1>|<(\w+)([^>]*)\/>/g);
+      if (nodes) {
+        let formattedNodes = nodes.map((node) => `\t${node}`).join("\n");
+        return `<Root xmlns="">\n${formattedNodes}\n</Root>`;
+      }
+    }
+  } catch (error) {}
   return xmlString;
 };
 
