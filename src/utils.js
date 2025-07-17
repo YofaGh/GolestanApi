@@ -50,22 +50,33 @@ export const XMLResultFormatter = (xmlString) => {
   return xmlString;
 };
 
+const scrollToResults = () => {
+  setTimeout(() => {
+    const resultsSection = document.getElementById("results-section");
+    if (resultsSection) {
+      resultsSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  }, 100);
+};
+
 export const handleGetData = async () => {
   const { setResult, setError, setLoading } = useReqStore.getState();
   try {
     setLoading(true);
     setError("");
+    setResult(""); // Clear previous results
+
+    // Scroll to results section when loading starts
+    scrollToResults();
+
     const formState = useFormStore.getState().formState;
     const data = await invoke("get_data", { ...formState });
     setResult(JSON.stringify(data, null, 2));
-    const button = document.querySelector(".submit-button");
-    button.classList.add("success");
-    setTimeout(() => button.classList.remove("success"), 2000);
   } catch (err) {
     setError(err.message);
-    const button = document.querySelector(".submit-button");
-    button.classList.add("error");
-    setTimeout(() => button.classList.remove("error"), 2000);
   } finally {
     setLoading(false);
   }
