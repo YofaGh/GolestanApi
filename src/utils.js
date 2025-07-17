@@ -4,6 +4,7 @@ import {
   useFormStore,
   useModalsStore,
   useProfilesStore,
+  useValidationStore,
 } from "./store";
 
 export const XMLInputFormatter = (inputStr) => {
@@ -64,15 +65,57 @@ const scrollToResults = () => {
 
 export const handleGetData = async () => {
   const { setResult, setError, setLoading } = useReqStore.getState();
-  try {
-    setLoading(true);
-    setError("");
-    setResult(""); // Clear previous results
+  const { setInvalidFields, setValidationError, clearValidation } =
+    useValidationStore.getState();
 
-    // Scroll to results section when loading starts
-    scrollToResults();
+  try {
+    clearValidation();
 
     const formState = useFormStore.getState().formState;
+    
+    const requiredFields = [
+      { field: "userName", label: "User Name", value: formState.userName },
+      { field: "password", label: "Password", value: formState.password },
+      { field: "reportId", label: "Report ID", value: formState.reportId },
+      {
+        field: "secretCode",
+        label: "Secret Code",
+        value: formState.secretCode,
+      },
+    ];
+
+    const emptyFields = requiredFields.filter((field) => !field.value.trim());
+
+    if (emptyFields.length > 0) {
+      const invalidFieldNames = emptyFields.map((field) => field.field);
+      const fieldLabels = emptyFields.map((field) => field.label);
+
+      setInvalidFields(invalidFieldNames);
+
+      if (emptyFields.length === 1) {
+        setValidationError(`Please fill in the ${fieldLabels[0]} field.`);
+      } else if (emptyFields.length === 2) {
+        setValidationError(
+          `Please fill in the ${fieldLabels[0]} and ${fieldLabels[1]} fields.`
+        );
+      } else {
+        const lastField = fieldLabels.pop();
+        setValidationError(
+          `Please fill in the ${fieldLabels.join(
+            ", "
+          )}, and ${lastField} fields.`
+        );
+      }
+
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+    setResult("");
+
+    scrollToResults();
+
     const data = await invoke("get_data", { ...formState });
     setResult(JSON.stringify(data, null, 2));
   } catch (err) {
