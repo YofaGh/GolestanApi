@@ -82,6 +82,7 @@ export const handleGetData = async () => {
         label: "Secret Code",
         value: formState.secretCode,
       },
+      { field: "url", label: "URL", value: formState.url },
     ];
 
     const emptyFields = requiredFields.filter((field) => !field.value.trim());
