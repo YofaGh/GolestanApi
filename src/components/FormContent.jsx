@@ -62,20 +62,14 @@ export default function FormContent() {
               className="url-input"
             />
             <div className="button-group">
-              <button
-                onClick={handleGetData}
-                disabled={loading}
-                className={`submit-button ${loading ? "loading" : ""}`}
-              >
-                <span className="button-text">
-                  {loading ? "Processing..." : "Get Data"}
-                </span>
+              <button onClick={handleGetData} className="submit-button">
+                <span className="button-text">Get Data</span>
                 <span className="button-icon">→</span>
               </button>
               {loading && (
                 <button
                   onClick={handleCancel}
-                  className="submit-button"
+                  className="submit-button cancel-button"
                   aria-label="Cancel request"
                 >
                   <span className="button-text">Cancel</span>
