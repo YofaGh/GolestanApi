@@ -1,12 +1,18 @@
 import { ParamInput } from ".";
 import { invoke } from "../tauri-utils";
 import { handleGetData } from "../utils";
-import { useFormStore, useActiveFieldStore, useReqStore } from "../store";
+import {
+  useFormStore,
+  useActiveFieldStore,
+  useReqStore,
+  useValidationStore,
+} from "../store";
 
 export default function FormContent() {
   const { formState, updateField } = useFormStore();
   const { activeField, setActiveField, deactiveField } = useActiveFieldStore();
   const { loading } = useReqStore();
+  const { validationError } = useValidationStore();
 
   const handleCancel = async () => {
     await invoke("cancel_request");
@@ -15,6 +21,14 @@ export default function FormContent() {
   return (
     <div>
       <div className="form-section credentials-section">
+        <div style={{ height: "4rem" }} />
+        {validationError && (
+          <div className="validation-error" role="alert">
+            <span className="error-icon">!</span>
+            <span className="error-text">{validationError}</span>
+          </div>
+        )}
+
         <h3>Authentication</h3>
         <div className="input-grid">
           <ParamInput labelText="User Name" fieldName="userName" />
@@ -62,20 +76,14 @@ export default function FormContent() {
               className="url-input"
             />
             <div className="button-group">
-              <button
-                onClick={handleGetData}
-                disabled={loading}
-                className={`submit-button ${loading ? "loading" : ""}`}
-              >
-                <span className="button-text">
-                  {loading ? "Processing..." : "Get Data"}
-                </span>
+              <button onClick={handleGetData} className="submit-button">
+                <span className="button-text">Get Data</span>
                 <span className="button-icon">→</span>
               </button>
               {loading && (
                 <button
                   onClick={handleCancel}
-                  className="submit-button"
+                  className="submit-button cancel-button"
                   aria-label="Cancel request"
                 >
                   <span className="button-text">Cancel</span>

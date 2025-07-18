@@ -69,6 +69,15 @@ export const useActiveFieldStore = create((set) => ({
   deactiveField: () => set({ activeField: null }),
 }));
 
+export const useValidationStore = create((set) => ({
+  invalidFields: [],
+  validationError: "",
+
+  setInvalidFields: (fields) => set({ invalidFields: fields }),
+  setValidationError: (error) => set({ validationError: error }),
+  clearValidation: () => set({ invalidFields: [], validationError: "" }),
+}));
+
 export const useReqStore = create((set) => ({
   result: "",
   error: "",
