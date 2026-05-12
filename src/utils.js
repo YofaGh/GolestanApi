@@ -7,27 +7,39 @@ import {
   useValidationStore,
 } from "./store";
 
+const formatXML = (xml) => {
+  let formatted = '';
+  let pad = 0;
+  xml = xml.replace(/>\s+</g, '><');
+  xml = xml.replace(/(>)(<)(\/*)/g, '$1\n$2$3');
+  xml.split('\n').forEach((node) => {
+    node = node.trim();
+    if (!node) return;
+
+    let indent = 0;
+    if (node.match(/.+<\/\w[^>]*>$/)) {
+      indent = 0;
+    } else if (node.match(/^<\/\w/)) {
+      if (pad > 0) pad -= 1;
+    } else if (node.match(/^<\w[^>]*[^\/]>.*$/)) {
+      indent = 1;
+    }
+    formatted += '  '.repeat(pad) + node + '\n';
+    pad += indent;
+  });
+  return formatted.trim();
+};
+
 export const XMLInputFormatter = (inputStr) => {
   try {
-    return inputStr
+    const cleaned = inputStr
+      .replace(/\\n/g, "")
       .replace(/"\s*\+\s*"/g, "")
       .replace(/^"|"$/g, "")
       .replace(/\\"/g, '"')
       .replace(/"\s*\+\s*(\w+)\s*\+\s*"/g, "$1")
-      .replace(/="\s*\+\s*(\w+)\s*\+\s*"/g, '="$1"')
-      .replace(/\\+/g, '"')
-      .replace(/></g, ">\n<")
-      .split("\n")
-      .map((line) => {
-        if (line.startsWith("</")) {
-          return line;
-        }
-        if (!line.startsWith("<Root")) {
-          return "  " + line;
-        }
-        return line;
-      })
-      .join("\n");
+      .replace(/="\s*\+\s*(\w+)\s*\+\s*"/g, '="$1"');
+    return formatXML(cleaned);
   } catch (error) {
     return inputStr;
   }
@@ -35,20 +47,15 @@ export const XMLInputFormatter = (inputStr) => {
 
 export const XMLResultFormatter = (xmlString) => {
   try {
-    const match = xmlString.match(
-      /<golInfoResult><Root[^>]*>([\s\S]*?)<\/Root>/
-    );
+    const match = xmlString.match(/<golInfoResult><Root[^>]*>([\s\S]*?)<\/Root>/);
     if (match) {
-      let nodes = match[1]
-        .replace(/\\"/g, '"')
-        .match(/<(\w+)([^>]*)>([^<]*)<\/\1>|<(\w+)([^>]*)\/>/g);
-      if (nodes) {
-        let formattedNodes = nodes.map((node) => `\t${node}`).join("\n");
-        return `<Root xmlns="">\n${formattedNodes}\n</Root>`;
-      }
+      const cleaned = match[1].replace(/\\"/g, '"');
+      return formatXML(`<Root xmlns="">\n${cleaned}\n</Root>`);
     }
-  } catch (error) {}
-  return xmlString;
+    return formatXML(xmlString);
+  } catch (error) {
+    return xmlString;
+  }
 };
 
 const scrollToResults = () => {
@@ -72,7 +79,7 @@ export const handleGetData = async () => {
     clearValidation();
 
     const formState = useFormStore.getState().formState;
-    
+
     const requiredFields = [
       { field: "userName", label: "User Name", value: formState.userName },
       { field: "password", label: "Password", value: formState.password },
